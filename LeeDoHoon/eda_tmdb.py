@@ -29,17 +29,21 @@ import warnings
 import os
 warnings.filterwarnings('ignore')
 
-# 그래프 저장 디렉토리 생성
+# 결과 저장 디렉토리 생성
 os.makedirs('plots', exist_ok=True)
+os.makedirs('images', exist_ok=True)
 
 # 한글 폰트 설정
 plt.rcParams['font.family'] = 'Malgun Gothic'  # Windows
 plt.rcParams['axes.unicode_minus'] = False
 
-# 데이터 로드
-df = pd.read_csv('data/tmdb_combined_10k.csv')
+# 데이터 로드 (스크립트 위치 기준으로 프로젝트 루트의 data 폴더 참조)
+base_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(base_dir)
+data_path = os.path.join(project_root, 'data', 'tmdb_combined_10k.csv')
+df = pd.read_csv(data_path)
 
-print("데이터 로드 완료")
+print(f"데이터 로드 완료: {data_path}")
 
 
 # ## 2. 데이터 기본 정보 확인
@@ -818,4 +822,52 @@ print("\n" + "=" * 60)
 print("최종 요약 테이블")
 print("=" * 60)
 print(summary_df.to_string(index=False))
-
+ 
+ 
+# In[63]:
+ 
+ 
+print("\n" + "=" * 60)
+print("8. 장르별 소비량 분석")
+print("=" * 60)
+ 
+# 장르별 소비량 (전체 기준)
+genre_counts = {}
+for genres_list in df_clean['genres_list']:
+    for genre in genres_list:
+        genre_counts[genre] = genre_counts.get(genre, 0) + 1
+ 
+genre_series = pd.Series(genre_counts).sort_values(ascending=False)
+total_titles = len(df_clean)
+ 
+genre_df = pd.DataFrame({
+    '장르': genre_series.index,
+    '작품 수': genre_series.values,
+    '비율(%)': (genre_series.values / total_titles * 100).round(2)
+})
+ 
+print("\n[전체 장르별 소비량 (작품 수 기준)]")
+print("-" * 60)
+print(genre_df.to_string(index=False))
+ 
+# 장르별 소비량 표를 이미지로 저장
+fig, ax = plt.subplots(figsize=(10, min(0.4 * len(genre_df), 20)))
+ax.axis('off')
+ax.axis('tight')
+ 
+table = ax.table(
+    cellText=genre_df.values,
+    colLabels=genre_df.columns,
+    cellLoc='center',
+    loc='center'
+)
+table.auto_set_font_size(False)
+table.set_fontsize(9)
+table.scale(1, 1.2)
+ 
+plt.tight_layout()
+output_path = 'images/genre_consumption_overall.jpg'
+plt.savefig(output_path, dpi=300, bbox_inches='tight')
+plt.close()
+print(f"\n장르별 소비량 표 이미지 저장: {output_path}")
+ 
