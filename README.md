@@ -66,12 +66,12 @@ $$W = \frac{v}{v+m} \cdot R + \frac{m}{v+m} \cdot C$$
 * **좌측(Blue):** 우리가 타겟팅한 **'숨은 명작'** 시장 (High Rating, Low Votes)
 ![Positioning Map](./images/2_positioning_map.png)
 
-### 4.4. OTT 플랫폼별 장르 특화도
+### 4.4. OTT 플랫폼별 장르 강세 히트맵
 플랫폼별로 강점을 보이는 장르가 뚜렷하게 구분됩니다.
 * **Watcha/Crunchyroll:** 애니메이션 특화
 * **Disney+:** 가족/판타지 강세
 * **Netflix:** 전 장르 고루 분포
-![Genre Heatmap](./images/3_ott_genre_correlation.png)
+![Genre Heatmap](./images/05_provider_genre_heatmap)
 
 ### 4.5. 추천 그룹별 OTT 보유 비중
 넷플릭스는 '인기작' 보유율이 높지만, **'숨은 명작'을 찾기 위해서는 Watcha와 Wavve가 더 유리**하다는 결과가 도출되었습니다.
